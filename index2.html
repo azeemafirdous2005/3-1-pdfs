@@ -4,12 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>3-1 Subject PDFs</title>
+
   <style>
     body {
       font-family: Arial, sans-serif;
       background: linear-gradient(135deg, #a8edea, #fed6e3);
       margin: 0;
-      padding: 0;
+      padding-bottom: 60px; /* space for marquee */
     }
     header {
       text-align: center;
@@ -77,9 +78,6 @@
       width: 300px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.3);
     }
-    .popup-content h3 {
-      margin-bottom: 20px;
-    }
     .popup-buttons button {
       margin: 5px;
       padding: 10px 20px;
@@ -95,10 +93,37 @@
     .download-btn:hover { background-color: #218838; }
     .cancel-btn { background-color: #dc3545; color: white; }
     .cancel-btn:hover { background-color: #a71d2a; }
+
+    /* Bottom Scrolling Marquee */
+    .marquee-container {
+      width: 100%;
+      background-color: #222;
+      color: white;
+      padding: 10px 0;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      font-size: 18px;
+      overflow: hidden;
+      z-index: 999;
+    }
+
+    .marquee-text {
+      display: inline-block;
+      white-space: nowrap;
+      animation: scroll-left 14s linear infinite;
+    }
+
+    @keyframes scroll-left {
+      from { transform: translateX(100%); }
+      to { transform: translateX(-100%); }
+    }
   </style>
 </head>
+
 <body>
-  <header>📚 3-1 Subject PDFs</header>
+
+  <header>📚 3-1 PDFs</header>
 
   <div class="subjects">
 
@@ -106,13 +131,10 @@
     <div class="subject" onclick="toggleUnits('se')">
       SOFTWARE ENGINEERING
       <div id="se" class="units">
-
         <a href="pdfs/SE_Unit1.pdf" onclick="showPopup(event, 'pdfs/SE_Unit1.pdf')">Unit 1</a>
-
         <a href="pdfs/SE_Unit2.pdf" onclick="showPopup(event, 'pdfs/SE_Unit2.pdf')">Unit 2</a>
         <a href="pdfs/SE_Unit3.pdf" onclick="showPopup(event, 'pdfs/SE_Unit3.pdf')">Unit 3</a>
         <a href="pdfs/SE_Unit4.zip" onclick="showPopup(event, 'pdfs/SE_Unit4.zip')">Unit 4</a>
-
         <a href="pdfs/SE_Unit5.pdf" onclick="showPopup(event, 'pdfs/SE_Unit5.pdf')">Unit 5</a>
       </div>
     </div>
@@ -125,7 +147,9 @@
         <a href="pdfs/DAA_Unit2.pdf" onclick="showPopup(event, 'pdfs/DAA_Unit2.pdf')">Unit 2</a>
         <a href="pdfs/DAA_Unit3.pdf" onclick="showPopup(event, 'pdfs/DAA_Unit3.pdf')">Unit 3</a>
         <a href="pdfs/DAA_Unit4updated.pdf" onclick="showPopup(event, 'pdfs/DAA_Unit4updated.pdf')">Unit 4</a>
-        <a href="pdfs/DAA_Unit5.pdf" onclick="showPopup(event, 'pdfs/DAA_Unit5.pdf')">Unit 5</a>
+        <a href="pdfs/UNIT5 PART-2-NP hard & Complete.pdf" onclick="showPopup(event, 'pdfs/UNIT5 PART-2-NP hard & Complete.pdf')">Unit 5 PART 2 NP HARD</a>
+        <a href="pdfs/cookstheorem.pdf" onclick="showPopup(event, 'pdfs/cookstheorem.pdf')">Cook’s Theorem</a>
+        <a href="pdfs/branchandbound.pdf" onclick="showPopup(event, 'pdfs/branchandbound.pdf')">Branch & Bound</a>
       </div>
     </div>
 
@@ -137,7 +161,8 @@
         <a href="pdfs/CN_Unit2.pdf" onclick="showPopup(event, 'pdfs/CN_Unit2.pdf')">Unit 2</a>
         <a href="pdfs/CN_Unit3.pdf" onclick="showPopup(event, 'pdfs/CN_Unit3.pdf')">Unit 3</a>
         <a href="pdfs/CN_Unit4updated.docx" onclick="showPopup(event, 'pdfs/CN_Unit4updated.docx')">Unit 4</a>
-        <a href="pdfs/CN_Unit5.pdf" onclick="showPopup(event, 'pdfs/CN_Unit5.pdf')">Unit 5</a>
+        <a href="pdfs/CN_UNIT_5(PART-1).docx" onclick="showPopup(event, 'pdfs/CN_UNIT_5(PART-1).docx')">Unit 5 – Part 1</a>
+        <a href="pdfs/CN UNIT-5 -PART 2.docx" onclick="showPopup(event, 'pdfs/CN UNIT-5 -PART 2.docx')">Unit 5 – Part 2</a>
       </div>
     </div>
 
@@ -159,8 +184,7 @@
       <div id="ai" class="units">
         <a href="pdfs/AI_Unit1.pdf" onclick="showPopup(event, 'pdfs/AI_Unit1.pdf')">Unit 1</a>
         <a href="pdfs/AI_Unit2.pdf" onclick="showPopup(event, 'pdfs/AI_Unit2.pdf')">Unit 2</a>
-        <a href="pdfs/AI 3,4,5UNITS.zip" onclick="showPopup(event, 'pdfs/AI 3,4,5UNITS.zip ')">Unit 3,4,5 ZIP</a>
-        
+        <a href="pdfs/AI 3,4,5UNITS.zip" onclick="showPopup(event, 'pdfs/AI 3,4,5UNITS.zip')">Unit 3,4,5 ZIP</a>
       </div>
     </div>
 
@@ -183,6 +207,13 @@
     </div>
   </div>
 
+  <!-- Bottom Marquee -->
+  <div class="marquee-container">
+    <div class="marquee-text">
+      📢 3-1 PDFs — PDFs can be opened directly. If it's a DOCX or ZIP file, please download it and then open. 📂
+    </div>
+  </div>
+
   <script>
     let currentPDF = '';
 
@@ -196,8 +227,8 @@
     }
 
     function showPopup(event, pdfPath) {
-      event.preventDefault(); // stops direct opening
-      event.stopPropagation(); // prevents parent click
+      event.preventDefault();
+      event.stopPropagation();
       currentPDF = pdfPath;
       document.getElementById('popup').style.display = 'flex';
     }
@@ -224,5 +255,6 @@
       closePopup();
     };
   </script>
+
 </body>
 </html>
